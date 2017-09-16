@@ -26,8 +26,8 @@ class dsSpider(Spider):
         self.init_start_urls()
 
     def init_start_urls(self):
-        begin_date = datetime.datetime.strptime('2014-07-02', "%Y-%m-%d")
-        end_date = datetime.datetime.strptime('2014-12-31', '%Y-%m-%d')
+        begin_date = datetime.datetime.strptime('2015-01-01', "%Y-%m-%d")
+        end_date = datetime.datetime.strptime('2015-12-31', '%Y-%m-%d')
 
         while begin_date <= end_date:
             date_str = begin_date.strftime("%Y%m%d")
