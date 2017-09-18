@@ -49,27 +49,33 @@ class AdaguDsSpiderPipeline(object):
 
     def saveDsMatch(self, item):
         session = loadSession()
-        session.query(DsMatch).filter(DsMatch.id == item['id']).delete()
-        match = DsMatch()
-        match.id = item['id']
-        match.start_time = item['start_time']
-        match.league_id = item['league_id']
-        match.home_id = item['home_id']
-        match.away_id = item['away_id']
-        match.home_goal = item['home_goal']
-        match.away_goal = item['away_goal']
-        match.url = item['url']
-        session.add(match)
-        session.commit()
+        match = session.query(DsMatch).filter(DsMatch.id == item['id']).first()
+        if match is None:
+            match = DsMatch()
+            match.id = item['id']
+            match.start_time = item['start_time']
+            match.league_id = item['league_id']
+            match.home_id = item['home_id']
+            match.away_id = item['away_id']
+            match.home_goal = item['home_goal']
+            match.away_goal = item['away_goal']
+            match.url = item['url']
+            session.add(match)
+            session.commit()
 
     def saveDsMatchEvent(self, item):
         session = loadSession()
-        event = DsMatchEvent()
-        event.match_id = item['match_id']
-        event.home_away = item['home_away']
-        event.team_name = item['team_name']
-        event.time_stamp = item['time_stamp']
-        event.type = item['type']
-        event.v = item['v']
-        session.add(event)
-        session.commit()
+        event = session.query(DsMatchEvent).filter(DsMatchEvent.match_id == item['match_id'],
+                                                   DsMatchEvent.type == item['type'],
+                                                   DsMatchEvent.time_stamp == item['time_stamp'],
+                                                   DsMatchEvent.team_name == item['team_name']).first()
+        if event is None:
+            event = DsMatchEvent()
+            event.match_id = item['match_id']
+            event.home_away = item['home_away']
+            event.team_name = item['team_name']
+            event.time_stamp = item['time_stamp']
+            event.type = item['type']
+            event.v = item['v']
+            session.add(event)
+            session.commit()
