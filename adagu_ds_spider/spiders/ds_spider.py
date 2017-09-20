@@ -11,22 +11,23 @@ import json
 
 from scrapy.spiders import Spider
 from scrapy import Request
-from adagu_ds_spider.items import DsLeague, DsMatch, DsTeam, DsMatchEvent
+from adagu_ds_spider.items import DsLeague, DsMatch, DsTeam, DsMatchEventJiaoqiu, DsMatchEventJiaoqiuList, DsMatchEventShezheng,DsMatchEventShezhengList,DsMatchEventShepian,DsMatchEventShepianList,DsMatchEventWeixian,DsMatchEventWeixianList,DsMatchEventJingong,DsMatchEventJingongList,DsMatchEventJinqiu,DsMatchEventJinqiuList
 
 
 class dsSpider(Spider):
     name = 'ds'
     allowed_domains = ['dszuqiu.com']
-    # start_urls = ['https://www.dszuqiu.com/race_xc/10219']
+    # start_urls = ['https://www.dszuqiu.com/race_xc/394590']
 
     # start_urls = ['https://www.dszuqiu.com/diary/20140701/p.1']
     start_urls = []
 
     def __init__(self):
         self.init_start_urls()
+        pass
 
     def init_start_urls(self):
-        begin_date = datetime.datetime.strptime('2016-01-01', "%Y-%m-%d")
+        begin_date = datetime.datetime.strptime('2015-01-01', "%Y-%m-%d")
         end_date = datetime.datetime.strptime('2016-12-31', '%Y-%m-%d')
 
         while begin_date <= end_date:
@@ -69,7 +70,7 @@ class dsSpider(Spider):
             home_href = tr.xpath('./td[4]/a/@href').extract_first()
             home_href_splits = home_href.split('/')
             home_id = home_href_splits[len(home_href_splits) - 1]
-            home_name = tr.xpath('./td[4]/a/text()').extract_first()
+            home_name = tr.xpath('./td[4]/a/text()').extract_first().strip()
             dsTeam = DsTeam()
             dsTeam['id'] = home_id
             dsTeam['name'] = home_name
@@ -83,9 +84,9 @@ class dsSpider(Spider):
 
             # 5.客队
             away_href = tr.xpath('./td[6]/a/@href').extract_first()
-            away_href_splits = home_href.split('/')
-            away_id = home_href_splits[len(home_href_splits) - 1]
-            away_name = tr.xpath('./td[6]/a/text()').extract_first()
+            away_href_splits = away_href.split('/')
+            away_id = away_href_splits[len(away_href_splits) - 1]
+            away_name = tr.xpath('./td[6]/a/text()').extract_first().strip()
             dsTeam = DsTeam()
             dsTeam['id'] = away_id
             dsTeam['name'] = away_name
@@ -112,7 +113,6 @@ class dsSpider(Spider):
             current_url_splits = current_url.split('p.')
             current_page = int(current_url_splits[1]) + 1
             next_page_url = current_url_splits[0] + 'p.' + str(current_page)
-            print next_page_url
             yield Request(next_page_url, self.parse)
 
     def parse_event(self, response):
@@ -137,47 +137,88 @@ class dsSpider(Spider):
                 shezheng_json0 = shezheng_json[0]
                 team_name0 = shezheng_json0['name']
                 team_data0 = shezheng_json0['data']
+                jiaoqiu = []
+                shezheng = []
+                jinqiu = []
                 for d in team_data0:
                     if d['marker'].has_key('radius'):
-                        event = DsMatchEvent()
+                        event = DsMatchEventShezheng()
                         event['match_id'] = match_id
                         event['home_away'] = None
                         event['team_name'] = team_name0
                         event['time_stamp'] = d['x']
                         event['v'] = d['y']
-                        event['type'] = 1
-                        yield event
+                        event['info'] = d['info']
+                        shezheng.append(event)
                     elif d['marker'].has_key('symbol'):
-                        event = DsMatchEvent()
-                        event['match_id'] = match_id
-                        event['home_away'] = None
-                        event['team_name'] = team_name0
-                        event['time_stamp'] = d['x']
-                        event['v'] = d['y']
-                        event['type'] = 0
-                        yield event
+                        symbol = d['marker']['symbol']
+                        if symbol.find('icon_corner') >= 0:
+                            event = DsMatchEventJiaoqiu()
+                            event['match_id'] = match_id
+                            event['home_away'] = None
+                            event['team_name'] = team_name0
+                            event['time_stamp'] = d['x']
+                            event['v'] = d['y']
+                            event['info'] = d['info']
+                            jiaoqiu.append(event)
+                        elif symbol.find('icon_goal') >= 0:
+                            event = DsMatchEventJinqiu()
+                            event['match_id'] = match_id
+                            event['home_away'] = None
+                            event['team_name'] = team_name0
+                            event['time_stamp'] = d['x']
+                            event['v'] = d['y']
+                            event['info'] = d['info']
+                            jinqiu.append(event)
+
                 shezheng_json1 = shezheng_json[1]
                 team_name1 = shezheng_json1['name']
                 team_data1 = shezheng_json1['data']
                 for d in team_data1:
                     if d['marker'].has_key('radius'):
-                        event = DsMatchEvent()
+                        event = DsMatchEventShezheng()
                         event['match_id'] = match_id
                         event['home_away'] = None
                         event['team_name'] = team_name1
                         event['time_stamp'] = d['x']
                         event['v'] = d['y']
-                        event['type'] = 1
-                        yield event
+                        event['info'] = d['info']
+                        shezheng.append(event)
                     elif d['marker'].has_key('symbol'):
-                        event = DsMatchEvent()
-                        event['match_id'] = match_id
-                        event['home_away'] = None
-                        event['team_name'] = team_name1
-                        event['time_stamp'] = d['x']
-                        event['v'] = d['y']
-                        event['type'] = 0
-                        yield event
+                        symbol = d['marker']['symbol']
+                        if symbol.find('icon_corner') >= 0:
+                            event = DsMatchEventJiaoqiu()
+                            event['match_id'] = match_id
+                            event['home_away'] = None
+                            event['team_name'] = team_name1
+                            event['time_stamp'] = d['x']
+                            event['v'] = d['y']
+                            event['info'] = d['info']
+                            jiaoqiu.append(event)
+                        elif symbol.find('icon_goal') >= 0:
+                            event = DsMatchEventJinqiu()
+                            event['match_id'] = match_id
+                            event['home_away'] = None
+                            event['team_name'] = team_name1
+                            event['time_stamp'] = d['x']
+                            event['v'] = d['y']
+                            event['info'] = d['info']
+                            jinqiu.append(event)
+
+                jiaoqiu_list = DsMatchEventJiaoqiuList()
+                jiaoqiu_list['match_id'] = match_id
+                jiaoqiu_list['datas'] = jiaoqiu
+                yield jiaoqiu_list
+
+                shezheng_list = DsMatchEventShezhengList()
+                shezheng_list['match_id'] = match_id
+                shezheng_list['datas'] = shezheng
+                yield shezheng_list
+
+                jinqiu_list = DsMatchEventJinqiuList()
+                jinqiu_list['match_id'] = match_id
+                jinqiu_list['datas'] = jinqiu
+                yield jinqiu_list
 
                 # 2. 射偏球门
                 shepian_start = script_txt.find('draw_half_line( $(\'#shezheng\').highcharts() );')
@@ -191,29 +232,36 @@ class dsSpider(Spider):
                 shepian_json0 = shepian_json[0]
                 team_name0 = shepian_json0['name']
                 team_data0 = shepian_json0['data']
+                shepian = []
                 for d in team_data0:
                     if d['marker'].has_key('radius'):
-                        event = DsMatchEvent()
+                        event = DsMatchEventShepian()
                         event['match_id'] = match_id
                         event['home_away'] = None
                         event['team_name'] = team_name0
                         event['time_stamp'] = d['x']
                         event['v'] = d['y']
-                        event['type'] = 2
-                        yield event
+                        event['info'] = d['info']
+                        shepian.append(event)
+
                 shepian_json1 = shepian_json[1]
                 team_name1 = shepian_json1['name']
                 team_data1 = shepian_json1['data']
                 for d in team_data1:
                     if d['marker'].has_key('radius'):
-                        event = DsMatchEvent()
+                        event = DsMatchEventShepian()
                         event['match_id'] = match_id
                         event['home_away'] = None
                         event['team_name'] = team_name1
                         event['time_stamp'] = d['x']
                         event['v'] = d['y']
-                        event['type'] = 2
-                        yield event
+                        event['info'] = d['info']
+                        shepian.append(event)
+
+                shepian_list = DsMatchEventShepianList()
+                shepian_list['match_id'] = match_id
+                shepian_list['datas'] = shepian
+                yield shepian_list
 
                 # 3. 危险进攻
                 danger_start = script_txt.find('draw_half_line( $(\'#shepian\').highcharts() );')
@@ -227,29 +275,36 @@ class dsSpider(Spider):
                 danger_json0 = danger_json[0]
                 team_name0 = danger_json0['name']
                 team_data0 = danger_json0['data']
+                weixian = []
                 for d in team_data0:
                     if d['marker'].has_key('radius'):
-                        event = DsMatchEvent()
+                        event = DsMatchEventWeixian()
                         event['match_id'] = match_id
                         event['home_away'] = None
                         event['team_name'] = team_name0
                         event['time_stamp'] = d['x']
                         event['v'] = d['y']
-                        event['type'] = 3
-                        yield event
+                        event['info'] = d['info']
+                        weixian.append(event)
+
                 danger_json1 = danger_json[1]
                 team_name1 = danger_json1['name']
                 team_data1 = danger_json1['data']
                 for d in team_data1:
                     if d['marker'].has_key('radius'):
-                        event = DsMatchEvent()
+                        event = DsMatchEventWeixian()
                         event['match_id'] = match_id
                         event['home_away'] = None
                         event['team_name'] = team_name1
                         event['time_stamp'] = d['x']
                         event['v'] = d['y']
-                        event['type'] = 3
-                        yield event
+                        event['info'] = d['info']
+                        weixian.append(event)
+
+                weixian_list = DsMatchEventWeixianList()
+                weixian_list['match_id'] = match_id
+                weixian_list['datas'] = weixian
+                yield weixian_list
 
                 # 4. 进攻
                 jingong_start = script_txt.find('draw_half_line( $(\'#danger\').highcharts() );')
@@ -263,26 +318,32 @@ class dsSpider(Spider):
                 jingong_json0 = jingong_json[0]
                 team_name0 = jingong_json0['name']
                 team_data0 = jingong_json0['data']
+                jingong = []
                 for d in team_data0:
                     if d['marker'].has_key('radius'):
-                        event = DsMatchEvent()
+                        event = DsMatchEventJingong()
                         event['match_id'] = match_id
                         event['home_away'] = None
                         event['team_name'] = team_name0
                         event['time_stamp'] = d['x']
                         event['v'] = d['y']
-                        event['type'] = 4
-                        yield event
+                        event['info'] = d['info']
+                        jingong.append(event)
+
                 jingong_json1 = jingong_json[1]
                 team_name1 = jingong_json1['name']
                 team_data1 = jingong_json1['data']
                 for d in team_data1:
                     if d['marker'].has_key('radius'):
-                        event = DsMatchEvent()
+                        event = DsMatchEventJingong()
                         event['match_id'] = match_id
                         event['home_away'] = None
                         event['team_name'] = team_name1
                         event['time_stamp'] = d['x']
                         event['v'] = d['y']
-                        event['type'] = 4
-                        yield event
+                        event['info'] = d['info']
+                        jingong.append(event)
+                jingong_list = DsMatchEventJingongList()
+                jingong_list['match_id'] = match_id
+                jingong_list['datas'] = jingong
+                yield jingong_list

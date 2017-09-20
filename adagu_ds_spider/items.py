@@ -44,3 +44,81 @@ class DsMatchEvent(Item):
     time_stamp = Field()
     type = Field()
     v = Field()
+
+class DsMatchEventJiaoqiu(Item):
+    id = Field()
+    match_id = Field()
+    home_away = Field()
+    team_name = Field()
+    time_stamp = Field()
+    v = Field()
+    info = Field()
+
+class DsMatchEventJiaoqiuList(Item):
+    match_id = Field()
+    datas = Field()
+
+class DsMatchEventShezheng(Item):
+    id = Field()
+    match_id = Field()
+    home_away = Field()
+    team_name = Field()
+    time_stamp = Field()
+    v = Field()
+    info = Field()
+
+class DsMatchEventShezhengList(Item):
+    match_id = Field()
+    datas = Field()
+
+class DsMatchEventShepian(Item):
+    id = Field()
+    match_id = Field()
+    home_away = Field()
+    team_name = Field()
+    time_stamp = Field()
+    v = Field()
+    info = Field()
+
+class DsMatchEventShepianList(Item):
+    match_id = Field()
+    datas = Field()
+
+class DsMatchEventWeixian(Item):
+    id = Field()
+    match_id = Field()
+    home_away = Field()
+    team_name = Field()
+    time_stamp = Field()
+    v = Field()
+    info = Field()
+
+class DsMatchEventWeixianList(Item):
+    match_id = Field()
+    datas = Field()
+
+class DsMatchEventJingong(Item):
+    id = Field()
+    match_id = Field()
+    home_away = Field()
+    team_name = Field()
+    time_stamp = Field()
+    v = Field()
+    info = Field()
+
+class DsMatchEventJingongList(Item):
+    match_id = Field()
+    datas = Field()
+
+class DsMatchEventJinqiu(Item):
+    id = Field()
+    match_id = Field()
+    home_away = Field()
+    team_name = Field()
+    time_stamp = Field()
+    v = Field()
+    info = Field()
+
+class DsMatchEventJinqiuList(Item):
+    match_id = Field()
+    datas = Field()

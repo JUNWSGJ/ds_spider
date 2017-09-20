@@ -57,21 +57,151 @@ ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4;
 
 -- -----------------------------------------------------
--- Table `adagu`.`ds_match_event`
+-- Table `adagu`.`ds_match_event_jiaoqiu`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `adagu`.`ds_match_event`;
+DROP TABLE IF EXISTS `adagu`.`ds_match_event_jiaoqiu`;
 
-CREATE TABLE IF NOT EXISTS `adagu`.`ds_match_event`(
+CREATE TABLE IF NOT EXISTS `adagu`.`ds_match_event_jiaoqiu`(
   `id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
   `match_id` BIGINT(20) UNSIGNED NOT NULL,
   `home_away` VARCHAR(8) NULL COMMENT '主队(home)/客队(away)',
+  `team_id` BIGINT(20) UNSIGNED NULL,
   `team_name` VARCHAR(45) NOT NULL COMMENT '球队名称',
   `time_stamp` SMALLINT(5) UNSIGNED NOT NULL COMMENT '比赛时间戳（单位分钟）',
-  `type` SMALLINT(2) NOT NULL COMMENT '事件类型(0-角球;1-射正球门;2-射偏球门;3-危险进攻;4-进攻)',
   `v` INT(5) NOT NULL COMMENT '值',
+  `info` VARCHAR(45) NULL COMMENT '待求证字段',
   `create_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `update_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  UNIQUE INDEX `ds_match_id` (`id` ASC))
+  UNIQUE INDEX `ds_match_event_jiaoqiu_id` (`id` ASC),
+  INDEX `ds_match_event_jiaoqiu_idx_u` (`match_id` ASC, `team_name` ASC , `time_stamp` ASC , `info` ASC),
+  INDEX `ds_match_event_jiaoqiu_idx` (`match_id` ASC, `team_name` ASC , `time_stamp` ASC),
+  INDEX `ds_match_event_match_id` (`match_id` ASC)
+  )
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4;
+
+-- -----------------------------------------------------
+-- Table `adagu`.`ds_match_event_shezheng`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `adagu`.`ds_match_event_shezheng`;
+
+CREATE TABLE IF NOT EXISTS `adagu`.`ds_match_event_shezheng`(
+  `id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `match_id` BIGINT(20) UNSIGNED NOT NULL,
+  `home_away` VARCHAR(8) NULL COMMENT '主队(home)/客队(away)',
+  `team_id` BIGINT(20) UNSIGNED NULL,
+  `team_name` VARCHAR(45) NOT NULL COMMENT '球队名称',
+  `time_stamp` SMALLINT(5) UNSIGNED NOT NULL COMMENT '比赛时间戳（单位分钟）',
+  `v` INT(5) NOT NULL COMMENT '值',
+  `info` VARCHAR(45) NULL COMMENT '待求证字段',
+  `create_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `update_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `ds_match_event_shezheng_id` (`id` ASC),
+  INDEX `ds_match_event_shezheng_idx_u` (`match_id` ASC, `team_name` ASC , `time_stamp` ASC , `info` ASC),
+  INDEX `ds_match_event_shezheng_idx` (`match_id` ASC, `team_name` ASC , `time_stamp` ASC),
+  INDEX `ds_match_event_match_id` (`match_id` ASC)
+  )
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4;
+
+-- -----------------------------------------------------
+-- Table `adagu`.`ds_match_event_shepian`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `adagu`.`ds_match_event_shepian`;
+
+CREATE TABLE IF NOT EXISTS `adagu`.`ds_match_event_shepian`(
+  `id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `match_id` BIGINT(20) UNSIGNED NOT NULL,
+  `home_away` VARCHAR(8) NULL COMMENT '主队(home)/客队(away)',
+  `team_id` BIGINT(20) UNSIGNED NULL,
+  `team_name` VARCHAR(45) NOT NULL COMMENT '球队名称',
+  `time_stamp` SMALLINT(5) UNSIGNED NOT NULL COMMENT '比赛时间戳（单位分钟）',
+  `v` INT(5) NOT NULL COMMENT '值',
+  `info` VARCHAR(45) NULL COMMENT '待求证字段',
+  `create_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `update_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `ds_match_event_shepian_id` (`id` ASC),
+  INDEX `ds_match_event_shepian_idx_u` (`match_id` ASC, `team_name` ASC , `time_stamp` ASC , `info` ASC),
+  INDEX `ds_match_event_shepian_idx` (`match_id` ASC, `team_name` ASC , `time_stamp` ASC),
+  INDEX `ds_match_event_match_id` (`match_id` ASC)
+  )
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4;
+
+-- -----------------------------------------------------
+-- Table `adagu`.`ds_match_event_weixian`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `adagu`.`ds_match_event_weixian`;
+
+CREATE TABLE IF NOT EXISTS `adagu`.`ds_match_event_weixian`(
+  `id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `match_id` BIGINT(20) UNSIGNED NOT NULL,
+  `home_away` VARCHAR(8) NULL COMMENT '主队(home)/客队(away)',
+  `team_id` BIGINT(20) UNSIGNED NULL,
+  `team_name` VARCHAR(45) NOT NULL COMMENT '球队名称',
+  `time_stamp` SMALLINT(5) UNSIGNED NOT NULL COMMENT '比赛时间戳（单位分钟）',
+  `v` INT(5) NOT NULL COMMENT '值',
+  `info` VARCHAR(45) NULL COMMENT '待求证字段',
+  `create_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `update_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `ds_match_event_weixian_id` (`id` ASC),
+  INDEX `ds_match_event_weixian_idx_u` (`match_id` ASC, `team_name` ASC , `time_stamp` ASC , `info` ASC),
+  INDEX `ds_match_event_weixian_idx` (`match_id` ASC, `team_name` ASC , `time_stamp` ASC),
+  INDEX `ds_match_event_match_id` (`match_id` ASC)
+  )
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4;
+
+-- -----------------------------------------------------
+-- Table `adagu`.`ds_match_event_jingong`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `adagu`.`ds_match_event_jingong`;
+
+CREATE TABLE IF NOT EXISTS `adagu`.`ds_match_event_jingong`(
+  `id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `match_id` BIGINT(20) UNSIGNED NOT NULL,
+  `home_away` VARCHAR(8) NULL COMMENT '主队(home)/客队(away)',
+  `team_id` BIGINT(20) UNSIGNED NULL,
+  `team_name` VARCHAR(45) NOT NULL COMMENT '球队名称',
+  `time_stamp` SMALLINT(5) UNSIGNED NOT NULL COMMENT '比赛时间戳（单位分钟）',
+  `v` INT(5) NOT NULL COMMENT '值',
+  `info` VARCHAR(45) NULL COMMENT '待求证字段',
+  `create_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `update_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `ds_match_event_jingong_id` (`id` ASC),
+  INDEX `ds_match_event_jingong_idx_u` (`match_id` ASC, `team_name` ASC , `time_stamp` ASC , `info` ASC),
+  INDEX `ds_match_event_jingong_idx` (`match_id` ASC, `team_name` ASC , `time_stamp` ASC),
+  INDEX `ds_match_event_match_id` (`match_id` ASC)
+  )
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4;
+
+-- -----------------------------------------------------
+-- Table `adagu`.`ds_match_event_jinqiu`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `adagu`.`ds_match_event_jinqiu`;
+
+CREATE TABLE IF NOT EXISTS `adagu`.`ds_match_event_jinqiu`(
+  `id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `match_id` BIGINT(20) UNSIGNED NOT NULL,
+  `home_away` VARCHAR(8) NULL COMMENT '主队(home)/客队(away)',
+  `team_id` BIGINT(20) UNSIGNED NULL,
+  `team_name` VARCHAR(45) NOT NULL COMMENT '球队名称',
+  `time_stamp` SMALLINT(5) UNSIGNED NOT NULL COMMENT '比赛时间戳（单位分钟）',
+  `v` INT(5) NOT NULL COMMENT '值',
+  `info` VARCHAR(45) NULL COMMENT '待求证字段',
+  `create_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `update_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `ds_match_event_jinqiu_id` (`id` ASC),
+  INDEX `ds_match_event_jinqiu_idx_u` (`match_id` ASC, `team_name` ASC , `time_stamp` ASC , `info` ASC),
+  INDEX `ds_match_event_jinqiu_idx` (`match_id` ASC, `team_name` ASC , `time_stamp` ASC),
+  INDEX `ds_match_event_match_id` (`match_id` ASC)
+  )
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4;
