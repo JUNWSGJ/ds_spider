@@ -3,13 +3,16 @@ from sqlalchemy import Column, String, Integer, DateTime
 import datetime
 
 
-class DsTeam(Base):
-    __tablename__ = 'ds_team'
+class DsMatchEventText(Base):
+    __tablename__ = 'ds_match_event_text'
     id = Column(Integer, primary_key=True)
-    name = Column(String(45))
-    name_short = Column(String(45))
-    name_en = Column(String(45))
-    url = Column(String(400))
+    match_id = Column(Integer)
+    home_away = Column(String(45))
+    team_id = Column(Integer)
+    team_name = Column(String(200))
+    timestamp = Column(Integer)
+    txt = Column(String(400))
+    info = Column(String(45))
     created_time = Column(DateTime, nullable=False)
     updated_time = Column(DateTime, nullable=False)
 

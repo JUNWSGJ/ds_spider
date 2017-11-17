@@ -16,6 +16,7 @@ from model.DsMatchEventShepian import DsMatchEventShepian
 from model.DsMatchEventWeixian import DsMatchEventWeixian
 from model.DsMatchEventJingong import DsMatchEventJingong
 from model.DsMatchEventJinqiu import DsMatchEventJinqiu
+from model.DsMatchEventText import DsMatchEventText
 
 
 class AdaguDsSpiderPipeline(object):
@@ -27,8 +28,10 @@ class AdaguDsSpiderPipeline(object):
             self.saveDsTeam(item)
         elif item_type == 'DsMatch':
             self.saveDsMatch(item)
-        elif item_type == 'DsMatchEvent':
+        elif item_type == 'DsMatchEventList':
             self.saveDsMatchEvent(item)
+        elif item_type == 'DsMatchEventTextList':
+            self.saveDsMatchEventText(item)
         elif item_type == 'DsMatchEventJiaoqiuList':
             self.saveDsMatchEventJiaoqiuList(item)
         elif item_type == 'DsMatchEventJinqiuList':
@@ -53,6 +56,7 @@ class AdaguDsSpiderPipeline(object):
             league.url = item['url']
             session.add(league)
             session.commit()
+        session.close()
 
     def saveDsTeam(self, item):
         session = loadSession()
@@ -61,9 +65,11 @@ class AdaguDsSpiderPipeline(object):
             team = DsTeam()
             team.id = item['id']
             team.name = item['name']
+            team.name_en = item['name_en']
             team.url = item['url']
             session.add(team)
             session.commit()
+        session.close()
 
     def saveDsMatch(self, item):
         session = loadSession()
@@ -74,32 +80,45 @@ class AdaguDsSpiderPipeline(object):
         match.league_id = item['league_id']
         match.home_id = item['home_id']
         match.away_id = item['away_id']
-        match.home_goal = item['home_goal']
-        match.away_goal = item['away_goal']
+        match.home_score = item['home_score']
+        match.away_score = item['away_score']
         match.url = item['url']
         session.add(match)
         session.commit()
+        session.close()
 
     def saveDsMatchEvent(self, item):
+        list = item['datas']
+        match_id = item['match_id']
         session = loadSession()
-        event = session.query(DsMatchEvent).filter(DsMatchEvent.match_id == item['match_id'],
-                                                   DsMatchEvent.type == item['type'],
-                                                   DsMatchEvent.time_stamp == item['time_stamp'],
-                                                   DsMatchEvent.team_name == item['team_name']).first()
-        if event is None:
+        session.query(DsMatchEvent).filter(DsMatchEvent.match_id == match_id).delete()
+        for i in list:
             event = DsMatchEvent()
-            event.match_id = item['match_id']
-            event.home_away = item['home_away']
-            event.team_name = item['team_name']
-            event.time_stamp = item['time_stamp']
-            event.type = item['type']
-            event.v = item['v']
+            event.match_id = match_id
+            event.type = i['type']
+            event.home_away = i['home_away']
+            event.team_name = i['team_name']
+            event.timestamp = i['timestamp']
+            event.v = i['v']
+            event.info = i['info']
             session.add(event)
-            session.commit()
+        session.commit()
+        session.close()
+
+    def saveDsMatchEventText(self, item):
+        list = item['datas']
+        match_id = item['match_id']
+        session = loadSession()
+        session.query(DsMatchEventText).filter(DsMatchEventText.match_id == match_id).delete()
+        for i in list:
+            event = DsMatchEventText()
+            event.match_id = match_id
+            event.txt = i['txt']
+            session.add(event)
+        session.commit()
+        session.close()
 
     def saveDsMatchEventJiaoqiuList(self, item):
-        print 'A'
-        print item
         list = item['datas']
         match_id = item['match_id']
         session = loadSession()
@@ -114,6 +133,7 @@ class AdaguDsSpiderPipeline(object):
             jiaoqiu.info = i['info']
             session.add(jiaoqiu)
         session.commit()
+        session.close()
 
     def saveDsMatchEventShezhengList(self, item):
         list = item['datas']

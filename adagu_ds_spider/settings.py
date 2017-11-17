@@ -14,7 +14,7 @@ BOT_NAME = 'adagu_ds_spider'
 SPIDER_MODULES = ['adagu_ds_spider.spiders']
 NEWSPIDER_MODULE = 'adagu_ds_spider.spiders'
 
-MYSQL_DATABASE_URI = 'mysql+mysqldb://adagu:P@sswdAdagu@114.55.236.191:3306/adagu?charset=utf8'
+MYSQL_DATABASE_URI = 'mysql+mysqldb://pluto:P@sswdPluto20171030@120.27.214.64:3306/pluto?charset=utf8'
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'adagu_ds_spider (+http://www.yourdomain.com)'
